@@ -2,48 +2,67 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import FormattedDate from '../components/FormattedDate.astro';
+import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION, SITE_TITLE, url } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 5);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<h1>{SITE_TITLE}</h1>
 			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
+				회사에서 숫자 다루는 일을 하다가, 퇴근하고 AI로 이것저것 만들어 보고 있습니다. 개발은
+				배운 적이 없어서 대부분 막히고, 막힌 자리를 여기에 적어 둡니다.
 			</p>
 			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
+				잘 된 이야기보다 <strong>안 된 이야기</strong>를 자세히 적습니다. 화면에 뜬 에러 문구를
+				그대로 옮겨 두는 게 이 블로그의 방식입니다. 같은 문구로 검색해서 들어오신 분이 있다면,
+				그게 이 글을 쓴 이유입니다.
 			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+
+			{
+				posts.length > 0 && (
+					<>
+						<h2>최근 글</h2>
+						<ul class="recent">
+							{posts.map((post) => (
+								<li>
+									<a href={url(`/blog/${post.id}/`)}>{post.data.title}</a>
+									<span class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+								</li>
+							))}
+						</ul>
+						<p><a href={url("/blog")}>글 전체 보기 →</a></p>
+					</>
+				)
+			}
 		</main>
 		<Footer />
+		<style>
+			.recent {
+				list-style: none;
+				padding: 0;
+			}
+			.recent li {
+				margin-bottom: 0.8em;
+			}
+			.recent .date {
+				display: block;
+				font-size: 0.85em;
+				color: rgb(var(--gray));
+			}
+		</style>
 	</body>
 </html>
