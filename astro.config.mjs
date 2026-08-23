@@ -7,7 +7,10 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://strongsiganl.github.io',
+	// 저장소 이름이 곧 하위 경로가 됩니다(strongsiganl.github.io/dev-blog/).
+	// 나중에 자기 도메인을 붙이면 이 base 줄만 지우면 링크가 전부 뿌리 주소로 돌아옵니다.
+	base: '/dev-blog',
 	integrations: [mdx(), sitemap()],
 	// Sätteri(기본 프로세서)는 서명 없는 네이티브 .node를 로드해
 	// Windows Smart App Control에 차단된다. 순수 JS인 unified로 되돌림.
