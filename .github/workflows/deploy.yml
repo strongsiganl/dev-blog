@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 소스 내려받기
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 사이트 만들기
         uses: withastro/action@v6
 
